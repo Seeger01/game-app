@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+	<title>Blackjack</title>
+  <style>
+.hidden {
+    display: none;
+  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #D7CFCF;
+}
+td {
+  border: 6px solid white;
+  width: 33.333%;
+  font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+  text-align: center;
+  font-size: 2em;
+  vertical-align: middle;
+}
+/* https://spin.atomicobject.com/2015/07/14/css-responsive-square/ */
+td:after {
+  content: "";
+  display: block;
+  padding-bottom: 10%;
+}
+td:first-of-type {
+  border-left-color: transparent;
+  border-top-color: transparent;
+}
+td:nth-of-type(2) {
+  border-top-color: transparent;
+}
+td:nth-of-type(3) {
+  border-right-color: transparent;
+  border-top-color: transparent;
+}
+tr:nth-of-type(3) td {
+  border-bottom-color: transparent;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js">
+</script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- loading formvalidator plugin (formvalidator.net) -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+</head>
+
+<body>
+	
+	<div data-role="page" id="black-jack">
+
+	<div data-role="header">
+		<a href="index.html" data-transition="slide" data-direction="reverse">Back</a>
+		<h1>Blackjack</h1>
+	</div>
+
+	<div data-role="main" class="ui-content">	
+		
+		<center>
+    Dealer:<input type="text" id="dealer">
+    <br> Player:
+    <input type="text" id="you">
+    <br>
+
+    <div id="msg" class="text-center alert alert-success" role="alert">Click start to play!, then click hit get cards!</div>
+
+    <input type=button value="HIT" onClick="HUMAN()">
+    <input type=button value="STAND" onClick="COMPUTER();determineWinner();">
+    <input type=button value="START" onClick="GenerateNewCard()">
+    <br>
+    <br>
+
+  </center>
+  <center>
+    <table id="resultat">
+      <tr>
+        <th>Games Played</th>
+      </tr>
+      <tr>
+        <td id="HUM"></td>
+        <td id="COMP"></td>
+        <td id="COUNT"></td>
+      </tr>
+    </table>
+  </center>
+  <br>
+
+  <center>
+    <h2>Stats</h2>
+    <table id="stat">
+      <tr>
+        <th>Player</th>
+        <th>Dealer</th>
+      </tr>
+      <td id="HUMW"></td>
+      <td id="COMPW"></td>
+    </table>
+  </center>
+<hr>
+<hr>
+<hr>
+
+	</div>
+
+	<div data-role="footer">
+		<p> <i>Copyright pse-designs &copy; 2018</i> </p>
+	</div>
+
+</div> <!-- end homepage -->
+
+<script>
+function getTheSuit()
+{
+  suit = Math.floor(Math.random() * 4) + 1
+  if(suit == 1)
+{
+  return "Hearts";
+}
+if(suit == 2)
+{
+  return "Diamonds";
+}
+if(suit == 3)
+{
+  return "Spades";
+}
+if(suit == 4)
+{
+  return "Clubs";
+  }
+}
+function getACard(turn)
+{
+  card = Math.floor(Math.random() * 13) + 1
+  suit = getTheSuit();
+  if(card == 1)
+{
+  return 11;
+}
+if(card > 10)
+{
+  return 10;
+}
+
+return card;
+}
+
+var counter = 0;
+
+function GenerateNewCard()
+{
+  counter +=1;
+  var d = document.getElementById("HUM").innerHTML = "";
+  var e = document.getElementById("COMP").innerHTML = "";
+  var f = document.getElementById("COUNT").innerHTML = counter;
+  var a = parseInt(document.getElementById("dealer").value = 0);
+  var res = document.getElementById("dealer");
+  var aa = parseInt(document.getElementById("you").value = 0);
+  var resa = document.getElementById("You");
+  resa.value = a + getACard("You");
+  res.value = aa + getACard("Dealer");
+}
+
+function COMPUTER()
+{
+  var a = parseInt(document.getElementById("dealer").value);
+  var res = document.getElementById("dealer");
+  while(res.value < 17)
+  {
+  var b = parseInt(document.getElementById("dealer").value);
+  res.value = b + getACard("Dealer");
+  }
+}
+function HUMAN()
+{
+  var a = parseInt(document.getElementById("you").value);
+  var res = document.getElementById("you");
+  res.value = a + getACard("You");
+  if(res.value > 21)
+  {
+    whoWonC += 1;
+    document.getElementById("COMPW").innerHTML = whoWonC;
+    var a = document.getElementById("COMP").innerHTML = "I WIN";
+  }
+}
+var whoWonH = 0;
+var whoWonC = 0;
+
+function determineWinner()
+{
+    var a = parseInt(document.getElementById("you").value);
+    var b = parseInt(document.getElementById("dealer").value);
+    if(b > 21)
+{
+    whoWonH += 1;
+    document.getElementById("HUMW").innerHTML = whoWonH;
+    var winner = document.getElementById("HUM").innerHTML = "I WIN";
+    return;
+}
+  if(a==b)
+  {
+    var a = document.getElementById("HUM").innerHTML = "TIE";
+    var b = document.getElementById("COMP").innerHTML = "TIE";
+  }
+  if(a>b)
+  {
+    whoWonH += 1;
+    document.getElementById("HUMW").innerHTML = whoWonH;
+    var a = document.getElementById("HUMW").innerHTML = "I WIN";
+  }
+  if(b>a)
+  {
+    whoWonC += 1;
+    document.getElementById("COMPW").innerHTML = whoWonC;
+    var g = document.getElementById("COMP").innerHTML = "I WIN!";
+  }
+}
+
+</script>
+
+</body>
+</html>
